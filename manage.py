@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, send_from_directory
 from werkzeug import secure_filename
 
 UPLOAD_FOLDER = os.path.join('static', 'images')
@@ -26,14 +26,14 @@ def upload():
                 img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     return render_template('upload.html')
 
-@app.route("/images")
+@app.route("/gallery")
 def images():
-    return render_template('images.html')
+    images = os.listdir(app.config['UPLOAD_FOLDER'])
+    return render_template("gallery.html", images=images)
 
-@app.route("/image/<filename>")
+@app.route('/image/<filename>')
 def get_image(filename):
-    full_filename = "../" + os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    return render_template("image.html", filename=full_filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route("/aboutus")
 def aboutus():
