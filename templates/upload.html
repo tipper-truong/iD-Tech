@@ -3,8 +3,8 @@
 {% block title %}Upload image(s){% endblock %}
 
 {% block content %}
-
-<h1>Upload image(s)</h1>
+<div class="container">
+ <h1 class="my-4 text-center text-lg-left">Upload Images</h1>
 <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
 <div class="block">
   <label class="button" for="images">Upload Images</label>
@@ -15,9 +15,9 @@
     </ul>
   </div>
   <button type="submit" class="btn btn-success">Submit</button>
-  {{ message }}
 </div>
 </form>
+</div>
 
 {% endblock %}
 
