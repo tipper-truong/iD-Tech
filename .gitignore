@@ -3,3 +3,4 @@ Dockerfile
 __pycache__/
 app.pyc
 docker-compose.yml
+darknet/

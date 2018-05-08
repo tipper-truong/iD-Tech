@@ -11,14 +11,18 @@
       <div class="row text-center text-lg-left">
         {% for image in images %}
         <div class="col-lg-3 col-md-4 col-xs-6">
-          <a href="#" class="d-block mb-4 h-100">
-            <img class="img-fluid img-thumbnail" src="{{url_for('get_image', filename=image)}}" http://placehold.it/400x300" alt="image">
+          <a href="?image={{image}}" class="d-block mb-4 h-100">
+            <img class="img-fluid img-thumbnail" src="{{url_for('get_image', filename=image)}}" http://placehold.it/400x300" alt="{{image}}" title={{image}}>
           </a>
         </div>
+
         {% endfor %}
+
+        <img class="img-fluid img-thumbnail" src="{{pred}}" http://placehold.it/400x300" alt="{{image}}" title={{image}}>
     
       </div>
 
     </div>
+
     <!-- /.container -->
   {% endblock %}
