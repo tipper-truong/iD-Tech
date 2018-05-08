@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, redirect, url_for, render_template
 from werkzeug import secure_filename
 
-UPLOAD_FOLDER = 'static/images/'
+UPLOAD_FOLDER = os.path.join('static', 'images')
 ALLOWED_EXTENSIONS = set(['jpeg', 'png', 'jpg', 'JPG', 'PNG', 'JPEG'])
 
 app = Flask(__name__)
@@ -29,6 +29,11 @@ def upload():
 @app.route("/images")
 def images():
     return render_template('images.html')
+
+@app.route("/image/<filename>")
+def get_image(filename):
+    full_filename = "../" + os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    return render_template("image.html", filename=full_filename)
 
 @app.route("/aboutus")
 def aboutus():
