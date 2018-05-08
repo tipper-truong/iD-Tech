@@ -1,0 +1,9 @@
+click
+Flask
+Flask-Script
+gunicorn
+itsdangerous
+Jinja2
+jsonschema
+MarkupSafe
+Werkzeug
