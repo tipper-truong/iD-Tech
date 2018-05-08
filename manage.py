@@ -16,7 +16,7 @@ def allowed_file(filename):
 def index():
     return render_template('index.html')
 
-@app.route("/upload", methods=["POST"])
+@app.route("/upload", methods=["GET", "POST"])
 def upload():
     if(request.method == "POST"):
         for img in request.files.getlist("files"): # for every img in the list of "files" (from <input name="files"/> 
@@ -24,7 +24,11 @@ def upload():
             if(allowed_file(filename)):
                 print("{} is the filename".format(filename))
                 img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    return render_template('index.html')
+    return render_template('upload.html')
+
+@app.route("/images")
+def images():
+    return render_template('images.html')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

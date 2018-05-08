@@ -2,7 +2,7 @@ $(function(){
   
   $('#images').change(function(e) {
     var files = e.target.files;
-		for (var i = 0; i <= files.length; i++) {
+    for (var i = 0; i <= files.length; i++) {
       
       // when i == files.length reorder and break
       if(i==files.length){
