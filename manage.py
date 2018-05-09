@@ -51,25 +51,26 @@ def display_images():
 
 @app.route("/gallery/image/<filename>", methods=["GET"])
 def get_prediction(filename):
-    print("Filename Prediction: " + filename)
     if(filename):
         #cmd = "./darknet detect cfg/yolov3.cfg yolov3.weights {}".format("../" + app.config['UPLOAD_FOLDER'] + "/" + filename) # image
         #p = subprocess.Popen(['(cd darknet/;{})'.format(cmd)], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         cmd = "flow --model cfg/yolo.cfg --load bin/yolo.weights --demo {} --saveVideo".format("../" + app.config['UPLOAD_FOLDER'] + "/" + filename) # video
         remove_video = "rm output.mp4"
         convert_avi_2_mp4 = "ffmpeg -i video.avi -c:a aac -b:a 128k -c:v libx264 -crf 23 output.mp4"
-        p = subprocess.Popen(['(cd darkflow/;{};{})'.format(cmd, convert_avi_2_mp4)], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        copy_video = "cp output.mp4 ../static/video"
+        p = subprocess.Popen(['(cd darkflow/;{};{};{};{})'.format(remove_video, cmd, convert_avi_2_mp4, copy_video)], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         stdout = []
-        """run = True
-        while run:
+        while True:
             line = p.stdout.readline()
             stdout.append(line)
             print(line),
             if line == '' and p.poll() != None:
-                run = False
+                try:
+                    return send_file("static/video/output.mp4", as_attachment=True)
+                except Exception as e:
+                    print(e)
                #return send_from_directory(app.config['PREDICT_FOLDER'], 'predictions.png')
-        """
-        return send_from_directory(app.config['PREDICT_VIDEO_FOLDER'], 'output.mp4')
+               #return send_from_directory(app.config['PREDICT_VIDEO_FOLDER'], 'output.mp4')
 
 @app.route('/image/<filename>')
 def get_image(filename):
