@@ -4,7 +4,7 @@ from werkzeug import secure_filename
 import subprocess
 import signal
 import sys
-import gc
+import time
 
 UPLOAD_FOLDER = os.path.join('static', 'images')
 PREDICT_FOLDER = os.path.join('darknet')
@@ -35,24 +35,24 @@ def upload():
 @app.route("/gallery")
 def images():
     if(request.args.get("image")):
-        gc.collect()
         cmd = "./darknet detect cfg/yolov3.cfg yolov3.weights {}".format("../" + app.config['UPLOAD_FOLDER'] + "/" + request.args.get("image")) # image
         #cmd =  "./darknet detector demo cfg/coco.data cfg/yolov3.cfg yolov3.weights {}".format("../" + app.config['UPLOAD_FOLDER'] + "/" + request.args.get("image")) # video
-        print(cmd)
-        p = subprocess.Popen(['(cd darknet/;{})'.format(cmd)], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p = subprocess.Popen(['(cd darknet/;{};cp predictions.png ../static)'.format(cmd)], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         stdout = []
         while True:
             line = p.stdout.readline()
             stdout.append(line)
             print(line),
             if line == '' and p.poll() != None:
-                return send_from_directory(app.config['PREDICT_FOLDER'], 'predictions.png')
-                #filename = "predictions.png"
-                #return render_template("result.html", filename=filename.strip())
+                #return render_template("result.html", "static/predictions.png")
+               return send_from_directory(app.config['PREDICT_FOLDER'], 'predictions.png')
 
-                
     images = os.listdir(app.config['UPLOAD_FOLDER'])
     return render_template("gallery.html", images=images)
+
+@app.route('/gallery?image=')
+def set_prediction():
+    return render_template('result.html')
 
 @app.route('/image/<filename>')
 def get_image(filename):
