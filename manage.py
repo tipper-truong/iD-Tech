@@ -2,7 +2,9 @@ import os
 from flask import Flask, request, redirect, url_for, render_template, send_from_directory
 from werkzeug import secure_filename
 import subprocess
+import signal
 import sys
+import gc
 
 UPLOAD_FOLDER = os.path.join('static', 'images')
 PREDICT_FOLDER = os.path.join('darknet')
@@ -33,9 +35,9 @@ def upload():
 @app.route("/gallery")
 def images():
     if(request.args.get("image")):
-
-        #cmd = "./darknet detect cfg/yolov3.cfg yolov3.weights {}".format("../" + app.config['UPLOAD_FOLDER'] + "/" + request.args.get("image")) # image
-        cmd =  "./darknet detector demo cfg/coco.data cfg/yolov3.cfg yolov3.weights {}".format("../" + app.config['UPLOAD_FOLDER'] + "/" + request.args.get("image")) # video
+        gc.collect()
+        cmd = "./darknet detect cfg/yolov3.cfg yolov3.weights {}".format("../" + app.config['UPLOAD_FOLDER'] + "/" + request.args.get("image")) # image
+        #cmd =  "./darknet detector demo cfg/coco.data cfg/yolov3.cfg yolov3.weights {}".format("../" + app.config['UPLOAD_FOLDER'] + "/" + request.args.get("image")) # video
         print(cmd)
         p = subprocess.Popen(['(cd darknet/;{})'.format(cmd)], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         stdout = []
@@ -45,6 +47,10 @@ def images():
             print(line),
             if line == '' and p.poll() != None:
                 return send_from_directory(app.config['PREDICT_FOLDER'], 'predictions.png')
+                #filename = "predictions.png"
+                #return render_template("result.html", filename=filename.strip())
+
+                
     images = os.listdir(app.config['UPLOAD_FOLDER'])
     return render_template("gallery.html", images=images)
 
