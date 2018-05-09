@@ -31,10 +31,11 @@ def upload():
             if(allowed_file(filename)):
                 print("{} is the filename".format(filename))
                 img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                return render_template('upload.html', success=success)
             else:
+                print("Image: " + image)
                 success = False
                 return render_template('upload.html', success=success)
+        return render_template('upload.html', success=success)
     return render_template('upload.html')
 
 @app.route("/gallery")
