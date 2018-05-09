@@ -7,7 +7,7 @@
 
 <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
 <div class="block">
-  <label class="button" for="images">Upload Images</label>
+  <label class="button" for="images">Upload Images or Videos</label>
   <input type="file" name="files" id="images" multiple="multiple"/>
   <div id="multiple-file-preview">
     <ul id="sortable">
@@ -16,9 +16,13 @@
   </div>
   <button type="submit" class="btn btn-success">Submit</button>
 </div>
-{% if success %}
+{% if success and request == "POST" %}
 <div class="alert alert-success" role="alert">
-  Uploaded image(s) successfully
+  Uploaded image(s)/video(s) successfully
+</div>
+{% elif not success and request == "POST" %}
+<div class="alert alert-danger" role="alert">
+ Uploaded image(s)/video(s) unsuccessfully, please try again
 </div>
 {% endif %}
 </form>

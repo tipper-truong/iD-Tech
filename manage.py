@@ -24,7 +24,6 @@ def index():
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
-    success = True
     if(request.method == "POST"):
         for img in request.files.getlist("files"): # for every img in the list of "files" (from <input name="files"/> 
             filename = secure_filename(img.filename)
@@ -32,10 +31,12 @@ def upload():
                 print("{} is the filename".format(filename))
                 img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             else:
-                print("Image: " + image)
-                success = False
-                return render_template('upload.html', success=success)
-        return render_template('upload.html', success=success)
+                return render_template('upload.html', success=False, request="POST") # wrong image upload
+        if(len(request.files.getlist("files")) > 0):
+            return render_template('upload.html', success=True, request="POST") # successful image upload
+
+    else:
+        return render_template('upload.html', success=False, request="GET") # don't display anything
     return render_template('upload.html')
 
 @app.route("/gallery")
