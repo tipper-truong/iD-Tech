@@ -24,12 +24,17 @@ def index():
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
+    success = True
     if(request.method == "POST"):
         for img in request.files.getlist("files"): # for every img in the list of "files" (from <input name="files"/> 
             filename = secure_filename(img.filename)
             if(allowed_file(filename)):
                 print("{} is the filename".format(filename))
                 img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                return render_template('upload.html', success=success)
+            else:
+                success = False
+                return render_template('upload.html', success=success)
     return render_template('upload.html')
 
 @app.route("/gallery")
@@ -37,14 +42,13 @@ def images():
     if(request.args.get("image")):
         cmd = "./darknet detect cfg/yolov3.cfg yolov3.weights {}".format("../" + app.config['UPLOAD_FOLDER'] + "/" + request.args.get("image")) # image
         #cmd =  "./darknet detector demo cfg/coco.data cfg/yolov3.cfg yolov3.weights {}".format("../" + app.config['UPLOAD_FOLDER'] + "/" + request.args.get("image")) # video
-        p = subprocess.Popen(['(cd darknet/;{};cp predictions.png ../static)'.format(cmd)], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p = subprocess.Popen(['(cd darknet/;{})'.format(cmd)], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         stdout = []
         while True:
             line = p.stdout.readline()
             stdout.append(line)
             print(line),
             if line == '' and p.poll() != None:
-                #return render_template("result.html", "static/predictions.png")
                return send_from_directory(app.config['PREDICT_FOLDER'], 'predictions.png')
 
     images = os.listdir(app.config['UPLOAD_FOLDER'])

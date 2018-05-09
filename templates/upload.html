@@ -16,6 +16,11 @@
   </div>
   <button type="submit" class="btn btn-success">Submit</button>
 </div>
+{% if success %}
+<div class="alert alert-success" role="alert">
+  Uploaded image(s) successfully
+</div>
+{% endif %}
 </form>
 </div>
 
