@@ -6,17 +6,22 @@ import signal
 import sys
 import time
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
 UPLOAD_FOLDER = os.path.join('static', 'images')
 PREDICT_FOLDER = os.path.join('darknet')
-ALLOWED_EXTENSIONS = set(['jpeg', 'png', 'jpg', 'JPG', 'PNG', 'JPEG', "MOV", "m4v", "mov"])
+PREDICT_VIDEO_FOLDER = os.path.join('darkflow')
+ALLOWED_EXTENSIONS = set(['jpeg', 'png', 'jpg', 'JPG', 'PNG', 'JPEG', "MOV", "m4v", "mov", "avi", "AVI", "wmv", "WMV"])
+ALLOWED_VIDEO_EXTENSIONS = set(["MOV", "m4v", "mov", "avi", "AVI", "wmv", "WMV"])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['PREDICT_FOLDER'] = PREDICT_FOLDER
+app.config['PREDICT_VIDEO_FOLDER'] = PREDICT_VIDEO_FOLDER
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
 
 @app.route("/")
 def index():
@@ -42,23 +47,23 @@ def upload():
 @app.route("/gallery")
 def images():
     if(request.args.get("image")):
-        cmd = "./darknet detect cfg/yolov3.cfg yolov3.weights {}".format("../" + app.config['UPLOAD_FOLDER'] + "/" + request.args.get("image")) # image
-        #cmd =  "./darknet detector demo cfg/coco.data cfg/yolov3.cfg yolov3.weights {}".format("../" + app.config['UPLOAD_FOLDER'] + "/" + request.args.get("image")) # video
-        p = subprocess.Popen(['(cd darknet/;{})'.format(cmd)], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        #cmd = "./darknet detect cfg/yolov3.cfg yolov3.weights {}".format("../" + app.config['UPLOAD_FOLDER'] + "/" + request.args.get("image")) # image
+        cmd = "flow --model cfg/yolo.cfg --load bin/yolo.weights --demo {} --saveVideo".format("../" + app.config['UPLOAD_FOLDER'] + "/" + request.args.get("image")) # video
+        # ffmpeg -i video.avi -c:a aac -b:a 128k -c:v libx264 -crf 23 output.mp4 --> convert .avi to .mp4
+        remove_video = "rm output.mp4"
+        convert_avi_2_mp4 = "ffmpeg -i video.avi -c:a aac -b:a 128k -c:v libx264 -crf 23 output.mp4"
+        p = subprocess.Popen(['(cd darkflow/;{};{};{})'.format(remove_video, cmd, convert_avi_2_mp4)], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         stdout = []
         while True:
             line = p.stdout.readline()
             stdout.append(line)
             print(line),
             if line == '' and p.poll() != None:
-               return send_from_directory(app.config['PREDICT_FOLDER'], 'predictions.png')
+               #return send_from_directory(app.config['PREDICT_FOLDER'], 'predictions.png')
+               return send_from_directory(app.config['PREDICT_VIDEO_FOLDER'], 'output.mp4')
 
     images = os.listdir(app.config['UPLOAD_FOLDER'])
     return render_template("gallery.html", images=images)
-
-@app.route('/gallery?image=')
-def set_prediction():
-    return render_template('result.html')
 
 @app.route('/image/<filename>')
 def get_image(filename):
