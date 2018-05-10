@@ -70,7 +70,7 @@ def get_prediction(filename):
 
         else: # it's a image file, run darknet yolo
             cmd = "./darknet detect cfg/yolov3.cfg yolov3.weights {}".format("../" + app.config['UPLOAD_FOLDER'] + "/" + filename) # image
-            copy_file = "cp predictions.png ../static/prediction"
+            copy_file = "cp predictions.jpg ../static/prediction"
             p = subprocess.Popen(['(cd darknet/;{};{})'.format(cmd, copy_file)], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             stdout = []
             while True:
@@ -78,7 +78,7 @@ def get_prediction(filename):
                 stdout.append(line)
                 print(line),
                 if line == '' and p.poll() != None:
-                    return send_from_directory(app.config['PREDICT_FOLDER'], 'predictions.png')
+                    return render_template("result.html", filename="predictions.jpg")
 
 @app.route('/predict/image/<filename>')
 def get_file_prediction(filename):
@@ -91,6 +91,18 @@ def get_image(filename):
 @app.route("/aboutus")
 def aboutus():
     return render_template('aboutus.html')
+
+@app.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

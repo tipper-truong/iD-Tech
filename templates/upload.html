@@ -3,7 +3,9 @@
 {% block title %}Upload image(s){% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="py-5" style="background: #f4f4f4; height: 100vh">
+  <div class="container-fluid my-5">
+  	<div class="container">
 
 <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
 <div class="block">
@@ -27,6 +29,9 @@
 {% endif %}
 </form>
 </div>
+</div>
+</div>
 
 {% endblock %}
 
+{% include "footer.html" %}
