@@ -5,3 +5,5 @@ app.pyc
 docker-compose.yml
 darknet
 static/images/
+static/video/
+static/spinner.gif
