@@ -4,3 +4,4 @@ __pycache__/
 app.pyc
 docker-compose.yml
 darknet
+static/images/
