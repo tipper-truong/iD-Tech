@@ -12,13 +12,16 @@
         {% for image in images %}
         <div class="col-lg-3 col-md-4 col-xs-6">
           <a href="{{url_for('get_prediction', filename=image)}}" class="d-block mb-4 h-100">
-            <img class="img-fluid img-thumbnail" src="{{url_for('get_image', filename=image)}}" http://placehold.it/400x300" alt="{{image}}" title={{image}}>
+            <img id="test"class="img-fluid img-thumbnail" src="{{url_for('get_image', filename=image)}}" http://placehold.it/400x300" alt="{{image}}" title={{image}} onclick="setVisible()">
           </a>
         </div>
 
         {% endfor %}
 
       </div>
+
+      <div id="loading"></div>
+
 
     </div>
 
