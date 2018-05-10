@@ -56,8 +56,3 @@ $(function(){
   }
   
  });
-
-
-function setVisible() {
-  document.querySelector("#loading").style.display = "block";
-}
