@@ -1,5 +1,15 @@
+{% include 'header.html' %}
+
+{% block title %}iD-Tech{% endblock %}
+
 {% block content %}
-<div class="block">
-<img class="img-fluid img-thumbnail" src="{{url_for('get_file_prediction', filename=filename)}}" alt="{{filename}}" title={{filename}}>
-</div>  
+<div class="py-5" style="background: #f4f4f4; height: 100vh">
+	<div class="container-fluid my-5">
+		<div class="container">
+		<img class="img-fluid img-thumbnail" src="{{url_for('get_file_prediction', filename=filename)}}" alt="{{filename}}" title={{filename}} style="vertical-align: middle;">
+		</div>
+	</div>  
+</div>
 {% endblock %}
+
+{% include "footer.html" %}
