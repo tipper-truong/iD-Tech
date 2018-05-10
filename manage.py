@@ -23,8 +23,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['PREDICT_FOLDER'] = PREDICT_FOLDER 
 
-
-
 @app.route("/")
 def index():
     return render_template('index.html')
