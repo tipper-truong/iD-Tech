@@ -41,6 +41,8 @@ def upload():
                 return render_template('upload.html', success=False, request="POST") # wrong image upload
         if(len(request.files.getlist("files")) > 0):
             return render_template('upload.html', success=True, request="POST") # successful image upload
+        else:
+            return render_template('upload.html', success=False, request="POST")
 
     else:
         return render_template('upload.html', success=False, request="GET") # don't display anything
