@@ -1,0 +1,9 @@
+.DS_Store
+Dockerfile
+__pycache__/
+app.pyc
+docker-compose.yml
+darknet
+static/images/
+static/prediction/
+static/spinner.gif

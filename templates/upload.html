@@ -1,0 +1,37 @@
+{% include 'header.html' %}
+
+{% block title %}Upload image(s){% endblock %}
+
+{% block content %}
+<div class="py-5" style="background: #f4f4f4; height: 100vh">
+  <div class="container-fluid my-5">
+  	<div class="container">
+
+<form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+<div class="block">
+  <label class="button" for="images">Upload Images or Videos</label>
+  <input type="file" name="files" id="images" multiple="multiple"/>
+  <div id="multiple-file-preview">
+    <ul id="sortable">
+      <div class="clear-both"></div>
+    </ul>
+  </div>
+  <button type="submit" class="btn btn-success">Submit</button>
+</div>
+{% if success and request == "POST" %}
+<div class="alert alert-success" role="alert">
+  Uploaded image(s)/video(s) successfully
+</div>
+{% elif not success and request == "POST" %}
+<div class="alert alert-danger" role="alert">
+ Uploaded image(s)/video(s) unsuccessfully, please try again
+</div>
+{% endif %}
+</form>
+</div>
+</div>
+</div>
+
+{% endblock %}
+
+{% include "footer.html" %}
