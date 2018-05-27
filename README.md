@@ -8,7 +8,7 @@ Akuang Mikey Saechao, Tipper Truong, and Nicholas Lacroix
 - DarkFlow: https://github.com/thtrieu/darkflow
 
 ### iD-Tech Demo Video: 
-[![id-tech-demo](https://img.youtube.com/vi/TBTyPR1Yij8/0.jpg)](https://www.youtube.com/watch?v=TBTyPR1Yij8&feature=youtu.be)
+[![id-tech-demo](https://img.youtube.com/vi/gYAZjj1jOYQ/0.jpg)](https://www.youtube.com/watch?v=gYAZjj1jOYQ&feature=youtu.be)
 
 ### Note:
 Please be aware of the dependencies and frameworks you will have to install to run this application such as Python, Python Flask, pip, DarkNet Yolo, DarkFlow, etc...
